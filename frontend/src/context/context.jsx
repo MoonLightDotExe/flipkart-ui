@@ -10,7 +10,7 @@ export const ContextProvider = ({ children }) => {
   const getFruits = async () => {
     try {
       const response = await fetch(
-        'https://flipkart-ui-1.onrender.com/routes/fruit_dash',
+        'https://flipkart-ui-hotg.onrender.com/routes/fruit_dash',
         {
           method: 'GET',
           headers: {
@@ -30,7 +30,7 @@ export const ContextProvider = ({ children }) => {
   const getBrandGoods = async () => {
     try {
       const response = await fetch(
-        'https://flipkart-ui-1.onrender.com/routes/brand_dash',
+        'https://flipkart-ui-hotg.onrender.com/routes/brand_dash',
         {
           method: 'GET',
           headers: {

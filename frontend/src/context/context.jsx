@@ -9,12 +9,15 @@ export const ContextProvider = ({ children }) => {
 
   const getFruits = async () => {
     try {
-      const response = await fetch('http://localhost:5000/routes/fruit_dash', {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
+      const response = await fetch(
+        'https://flipkart-ui-1.onrender.com/routes/fruit_dash',
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
         },
-      });
+      );
 
       const data = await response.json();
       setFruitsData(data);
@@ -26,12 +29,15 @@ export const ContextProvider = ({ children }) => {
 
   const getBrandGoods = async () => {
     try {
-      const response = await fetch('http://localhost:5000/routes/brand_dash', {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
+      const response = await fetch(
+        'https://flipkart-ui-1.onrender.com/routes/brand_dash',
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
         },
-      });
+      );
 
       const data = await response.json();
       setBrandsData(data);

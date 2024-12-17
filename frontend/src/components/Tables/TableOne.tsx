@@ -1,6 +1,8 @@
 import { useEffect, useContext } from 'react';
 import regContext from '../../context/context.jsx';
 
+import moment from 'moment'
+
 const TableOne = () => {
   const { getBrandGoods, brands_data } = useContext(regContext);
 
@@ -52,7 +54,7 @@ const TableOne = () => {
                 <p className="text-black dark:text-white">{key + 1}</p>
               </div>
               <div className="p-2.5 xl:p-5 text-center">
-                <p className="text-black dark:text-white">{brand.Timestamp}</p>
+                <p className="text-black dark:text-white">{ brand.Timestamp }</p>
               </div>
               <div className="p-2.5 xl:p-5 text-center">
                 <p className="text-black dark:text-white">{brand.Brand}</p>

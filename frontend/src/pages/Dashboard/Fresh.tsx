@@ -1,20 +1,74 @@
-import React,{useEffect,useState, useContext} from 'react'; 
-import CardDataStats from '../../components/CardDataStats';
-import ChartOne from '../../components/Charts/ChartOne';
-import ChartThree from '../../components/Charts/ChartThree';
-import ChartTwo from '../../components/Charts/ChartTwo';
-import ChatCard from '../../components/Chat/ChatCard';
-import MapOne from '../../components/Maps/MapOne';
-import TableOne from '../../components/Tables/TableOne';
+import React, { useEffect, useRef, useState } from "react";
 
-import regContext from '../../context/context.jsx'
+const Fresh = () => {
+  const videoRef = useRef(null);
+  const [predictions, setPredictions] = useState([]);
+  const [inferEngine, setInferEngine] = useState(null);
+  const workerId = "iris-has1f/1"; // Replace with your model ID
+  const apiKey = "rf_TMh3HikGBud57qbgT6u65uDtt9d2"; // Replace with your API key
 
-const Fresh: React.FC = () => {
-    return (
-        <>
-            HELLO FRESH
-        </>
-    )
-}
+    useEffect(() => {
+    // Initialize inference engine
+    const { InferenceEngine, CVImage } = window.inferencejs;
+    const engine = new InferenceEngine();
+      console.log(window.inferencejs);
 
-export default Fresh
+    engine
+      .startWorker("iris-has1f/1", "1", "rf_TMh3HikGBud57qbgT6u65uDtt9d2")
+      .then(() => {
+        console.log("Model loaded!");
+        setInferEngine(engine);
+      })
+      .catch((err) => console.error("Error loading model:", err));
+  }, []);
+
+  useEffect(() => {
+    if (inferEngine && videoRef.current) {
+      const video = videoRef.current;
+
+      const handleStream = async () => {
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: true,
+        });
+        video.srcObject = stream;
+        video.play();
+
+        const processFrame = async () => {
+          if (!video.paused && !video.ended) {
+            const image = new window.inferencejs.CVImage(video);
+            inferEngine
+              .infer(workerId, image)
+              .then((predictions) => {
+                console.log("Predictions:", predictions);
+                setPredictions(predictions); // Update state
+              })
+              .catch((err) => console.error("Inference error:", err));
+          }
+          requestAnimationFrame(processFrame);
+        };
+
+        processFrame();
+      };
+
+      handleStream();
+
+      // Cleanup on component unmount
+      return () => {
+        const tracks = video.srcObject?.getTracks();
+        tracks?.forEach((track) => track.stop());
+      };
+    }
+  }, [inferEngine]);
+
+  return (
+    <div>
+      <video ref={videoRef} width="640" height="640" autoPlay muted />
+      <div>
+        <h3>Predictions:</h3>
+        <pre>{JSON.stringify(predictions, null, 2)}</pre>
+      </div>
+    </div>
+  );
+};
+
+export default Fresh;
